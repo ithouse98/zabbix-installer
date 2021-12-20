@@ -22,7 +22,19 @@ yum -y install MariaDB-server MariaDB-client MariaDB-devel
 systemctl start mariadb
 systemctl enable mariadb
 
-mysql_secure_installation ## set password 123456789
+## set password 123456789
+mysql_secure_installation <<EOF
+
+n
+Y
+123456789
+123456789
+y
+n
+y
+y
+EOF
+
 
 
 ## create database
@@ -49,10 +61,11 @@ yum install -y zabbix-web-mysql-scl zabbix-apache-conf-scl
 zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p123456789 zabbix
 
 ## setup databse in config file
-## /etc/zabbix/zabbix_server.conf
+sed -i 's/# DBPassword=/DBPassword=123456789/' /etc/zabbix/zabbix_server.conf
+
 
 ## setup time/zone
-sed -i '/; php_value[date.timezone] = Europe/Riga/php_value[date.timezone] = Asia/Tehran/'  /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf
+echo 'php_value[date.timezone] = Asia/Tehran' >>  /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf
 
 
 systemctl restart zabbix-server zabbix-agent httpd rh-php72-php-fpm
@@ -61,6 +74,7 @@ systemctl enable zabbix-server zabbix-agent httpd rh-php72-php-fpm
 
 yum install -y httpd httpd-devel
 systemctl start httpd
+systemctl enable httpd
 
 yum install -y yum-utils
 yum-config-manager --enable rhel-server-rhscl-7-rpms
@@ -72,6 +86,5 @@ scl enable rh-php72 bash
 
 systemctl enable rh-php72-php-fpm
 
-yum -y install epel-release
 
 yum install -y pcre-devel.x86_64 pcre.x86_64 fping libevent libevent-devel zlib.x86_64 zlib-devel.x86_64 OpenIPMI-devel.x86_64 OpenIPMI-libs.x86_64 OpenIPMI.x86_64 libssh2-devel.x86_64 libssh2.x86_64 libcurl-devel.x86_64 libcurl.x86_64 libxml2-static.x86_64 libxml2.x86_64 libxml2-devel.x86_64 netsnmp-libs.x86_64 net-snmp-devel.x86_64 net-snmp.x86_64 java-headless unixODBC-devel.x86_64 unixODBC.x86_64
