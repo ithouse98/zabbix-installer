@@ -22,13 +22,13 @@ yum -y install MariaDB-server MariaDB-client MariaDB-devel
 systemctl start mariadb
 systemctl enable mariadb
 
-## set password 123456789
+## set password bk201897
 mysql_secure_installation <<EOF
 
 n
 Y
-123456789
-123456789
+bk201897
+bk201897
 y
 n
 y
@@ -38,10 +38,10 @@ EOF
 
 
 ## create database
-mysql -u root -p"123456789" -e "create database zabbix character set utf8 collate utf8_bin;"
-mysql -u root -p"123456789" -e "create user 'zabbix'@'%' identified by '123456789';"
-mysql -u root -p"123456789" -e "grant all privileges on zabbix.* to 'zabbix'@'%';"
-mysql -u root -p"123456789" -e "flush privileges;"
+mysql -u root -p"bk201897" -e "create database zabbix character set utf8 collate utf8_bin;"
+mysql -u root -p"bk201897" -e "create user 'zabbix'@'%' identified by 'bk201897';"
+mysql -u root -p"bk201897" -e "grant all privileges on zabbix.* to 'zabbix'@'%';"
+mysql -u root -p"bk201897" -e "flush privileges;"
 
 
 rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm
@@ -58,10 +58,10 @@ sed -i '0,/enabled=0/{s/enabled=0/enabled=1/}' /etc/yum.repos.d/zabbix.repo
 
 yum install -y zabbix-web-mysql-scl zabbix-apache-conf-scl
 
-zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p123456789 zabbix
+zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -pbk201897 zabbix
 
 ## setup databse in config file
-sed -i 's/# DBPassword=/DBPassword=123456789/' /etc/zabbix/zabbix_server.conf
+sed -i 's/# DBPassword=/DBPassword=bk201897/' /etc/zabbix/zabbix_server.conf
 
 
 ## setup time/zone
